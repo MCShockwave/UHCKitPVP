@@ -1,0 +1,10 @@
+name: KitUHC
+main: net.mcshockwave.KitUHC.KitUHC
+version: 1.0
+author: Blaxcraft
+softdepend: [ProtocolLib]
+commands:
+   uhckits:
+   spawn:
+   tog:
+   hof:
