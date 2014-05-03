@@ -3,6 +3,7 @@ package net.mcshockwave.KitUHC;
 import net.mcshockwave.KitUHC.HoF.HallOfFame;
 import net.mcshockwave.KitUHC.Menu.ItemMenuListener;
 import net.mcshockwave.UHC.UltraHC;
+import net.mcshockwave.UHC.worlds.Multiworld;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,12 +15,25 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.io.File;
+
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.blocks.BaseBlock;
+import com.sk89q.worldedit.bukkit.BukkitUtil;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.patterns.SingleBlockPattern;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.schematic.SchematicFormat;
 
 public class KitUHC extends JavaPlugin {
 
@@ -31,6 +45,8 @@ public class KitUHC extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new ItemMenuListener(), this);
 
 		SQLTable.enable();
+
+		saveDefaultConfig();
 
 		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
 			ProtocolManager pm = ProtocolLibrary.getProtocolManager();
@@ -100,6 +116,12 @@ public class KitUHC extends JavaPlugin {
 				p.getWorld().setSpawnLocation(x, y, z);
 				p.sendMessage(String.format("§aSet spawn location to x%s y%s z%s", x, y, z));
 			}
+
+			if (args[0].equalsIgnoreCase("setupworld")) {
+				World w = KitUHC.isUHCEnabled() ? Multiworld.getKit() : p.getWorld();
+
+				setUp(w);
+			}
 		}
 		return false;
 	}
@@ -109,7 +131,7 @@ public class KitUHC extends JavaPlugin {
 			UltraHC.updateHealthFor(p);
 			return;
 		}
-		
+
 		Bukkit.getScheduler().runTaskLater(ins, new Runnable() {
 			public void run() {
 				Scoreboard s = Bukkit.getScoreboardManager().getMainScoreboard();
@@ -126,13 +148,70 @@ public class KitUHC extends JavaPlugin {
 	}
 
 	public static void setUp(World w) {
-		// TODO Set up world command
+		Bukkit.broadcastMessage("§a§nSetting up world...§r\n ");
+		
+		Bukkit.broadcastMessage("§eSetting gamerules...");
+		String[] rules = { "doMobSpawning:false", "doDaylightCycle:false", "doFireTick:false", "doMobLoot:false",
+				"doTileDrops:false", "mobGriefing:false" };
+		for (String s : rules) {
+			String[] ss = s.split(":");
+			w.setGameRuleValue(ss[0], ss[1]);
+		}
+
+		Bukkit.broadcastMessage("§eSetting up border...");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "wb " + w.getName() + " set 200 0 0");
+
+		Bukkit.broadcastMessage("§eGenerating walls...");
+		int rad = 200;
+		EditSession es = new EditSession(new BukkitWorld(w), Integer.MAX_VALUE);
+
+		Region r = new CuboidRegion(new Vector(-rad, 0, -rad), new Vector(rad, 256, rad));
+		try {
+			es.makeCuboidWalls(r, new SingleBlockPattern(new BaseBlock(7)));
+			Bukkit.broadcastMessage("§bWalls Generated");
+		} catch (MaxChangedBlocksException e) {
+			e.printStackTrace();
+			Bukkit.broadcastMessage("§cERROR GENERATING WALLS: " + e.getMessage());
+		}
+
+		Bukkit.broadcastMessage("§eLoading schematics...");
+		Location lobby = new Location(w, 0, 32, 0);
+		loadSchematic("uhcKitSpawn", lobby);
+
+		Location ench = new Location(w, 0, w.getHighestBlockYAt(0, 0), 0);
+		loadSchematic("uhcKitEnchanting", ench);
+		
+		Bukkit.broadcastMessage("§eSetting spawn point...");
+		w.setSpawnLocation(0, 32, 0);
+
+		Bukkit.broadcastMessage("§a§lDone!");
+	}
+
+	public static void loadSchematic(String name, Location l) {
+		File f = new File(ins.getDataFolder(), name + ".schematic");
+
+		if (!f.exists()) {
+			Bukkit.broadcastMessage("§cSchematic not found: " + name + ".schematic");
+			return;
+		}
+
+		SchematicFormat schematic = SchematicFormat.getFormat(f);
+
+		EditSession session = new EditSession(new BukkitWorld(l.getWorld()), Integer.MAX_VALUE);
+		try {
+			CuboidClipboard clipboard = schematic.load(f);
+			clipboard.paste(session, BukkitUtil.toVector(l), false);
+			session.flushQueue();
+		} catch (Exception e) {
+			Bukkit.broadcastMessage("§cError while loading schem: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	public static boolean isHoloEnabled(String pl) {
 		return SQLTable.Settings.getInt("Username", pl, "Enable_Holo") == 1;
 	}
-	
+
 	public static boolean isUHCEnabled() {
 		return Bukkit.getPluginManager().isPluginEnabled("MCShockwaveUHC");
 	}

@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="C:/HoloAPI-v1.2.3.jar"/>
 	<classpathentry kind="lib" path="C:/ProtocolLib-3.1.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/UltraHardcore 2"/>
+	<classpathentry kind="lib" path="C:/WorldEdit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

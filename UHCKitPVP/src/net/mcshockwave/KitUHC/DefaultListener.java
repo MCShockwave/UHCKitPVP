@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -99,7 +100,10 @@ public class DefaultListener implements Listener {
 
 		if (b != null) {
 			if (b.getType() == Material.WALL_SIGN) {
-				Kit.getMenu(p).open(p);
+				Sign s = (Sign) b.getState();
+				if (s.getLine(0).equalsIgnoreCase("[Kit]")) {
+					Kit.getMenu(p).open(p);
+				}
 			}
 		}
 
