@@ -2,6 +2,7 @@ package net.mcshockwave.KitUHC;
 
 import net.mcshockwave.KitUHC.HoF.HallOfFame;
 import net.mcshockwave.KitUHC.Menu.ItemMenuListener;
+import net.mcshockwave.UHC.UltraHC;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -104,6 +105,11 @@ public class KitUHC extends JavaPlugin {
 	}
 
 	public static void updateHealth(final Player p) {
+		if (isUHCEnabled()) {
+			UltraHC.updateHealthFor(p);
+			return;
+		}
+		
 		Bukkit.getScheduler().runTaskLater(ins, new Runnable() {
 			public void run() {
 				Scoreboard s = Bukkit.getScoreboardManager().getMainScoreboard();

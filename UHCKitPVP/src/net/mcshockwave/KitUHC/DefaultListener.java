@@ -345,6 +345,9 @@ public class DefaultListener implements Listener {
 
 	@EventHandler
 	public void onServerListPing(ServerListPingEvent event) {
+		if (KitUHC.isUHCEnabled()) {
+			return;
+		}
 		event.setMotd("§cMCShockwave §7UHC §8- §a[Kit PVP]");
 	}
 

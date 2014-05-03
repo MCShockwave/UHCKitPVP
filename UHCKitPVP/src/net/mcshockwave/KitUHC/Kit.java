@@ -96,7 +96,7 @@ public enum Kit {
 	public ItemStack[]	acontents;
 	public ItemStack[]	give;
 
-	public Team			team;
+	public Team			team	= null;
 
 	private Kit(String scpre, Material ico, int am, int da, Material h, Material c, Material l, Material b,
 			ItemStack... kit) {
@@ -112,12 +112,14 @@ public enum Kit {
 		if (te != null) {
 			te.unregister();
 		}
-		Team t = s.registerNewTeam(shorten(name(), 10));
-		t.setPrefix(scpre + "§r ");
-		t.setSuffix("§r");
-		t.setAllowFriendlyFire(true);
-		t.setCanSeeFriendlyInvisibles(false);
-		team = t;
+		if (!KitUHC.isUHCEnabled()) {
+			Team t = s.registerNewTeam(shorten(name(), 10));
+			t.setPrefix(scpre + "§r ");
+			t.setSuffix("§r");
+			t.setAllowFriendlyFire(true);
+			t.setCanSeeFriendlyInvisibles(false);
+			team = t;
+		}
 	}
 
 	private static ItemStack i(Material m) {
@@ -136,8 +138,10 @@ public enum Kit {
 		p.teleport(getSpawn(p.getWorld()));
 		KitUHC.updateHealth(p);
 
-		team.addPlayer(p);
-		p.setPlayerListName(shorten(p.getName(), 11) + "§r");
+		if (team != null) {
+			team.addPlayer(p);
+			p.setPlayerListName(shorten(p.getName(), 11) + "§r");
+		}
 
 		if (this == Half_Heart_Warrior) {
 			p.setHealth(1);
@@ -178,7 +182,7 @@ public enum Kit {
 
 	public static final Material[]	nospawn		= { Material.STATIONARY_WATER, Material.WATER,
 			Material.STATIONARY_LAVA, Material.LAVA, Material.STONE, Material.GRAVEL, Material.BEDROCK,
-			Material.COAL_ORE, Material.IRON_ORE};
+			Material.COAL_ORE, Material.IRON_ORE };
 
 	public static Location getSpawn(World w) {
 		boolean done = false;
