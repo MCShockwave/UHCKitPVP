@@ -3,7 +3,7 @@ main: net.mcshockwave.KitUHC.KitUHC
 version: 1.0
 author: Blaxcraft
 depend: [WorldEdit]
-softdepend: [ProtocolLib]
+softdepend: [ProtocolLib, MCShockwaveUHC]
 commands:
    uhckits:
    spawn:
