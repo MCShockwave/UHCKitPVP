@@ -122,6 +122,15 @@ public class KitUHC extends JavaPlugin {
 
 				setUp(w);
 			}
+			
+			if (isUHCEnabled() && args[0].equalsIgnoreCase("regenWorld")) {
+				for (Player p2 : Multiworld.getKit().getPlayers()) {
+					p2.teleport(Multiworld.getLobby().getSpawnLocation());
+				}
+				
+				UltraHC.deleteWorld(Multiworld.getKit());
+				Multiworld.loadAll();
+			}
 		}
 		return false;
 	}
