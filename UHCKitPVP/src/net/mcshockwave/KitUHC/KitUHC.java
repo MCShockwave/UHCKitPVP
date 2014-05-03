@@ -126,5 +126,9 @@ public class KitUHC extends JavaPlugin {
 	public static boolean isHoloEnabled(String pl) {
 		return SQLTable.Settings.getInt("Username", pl, "Enable_Holo") == 1;
 	}
+	
+	public static boolean isUHCEnabled() {
+		return Bukkit.getPluginManager().isPluginEnabled("MCShockwaveUHC");
+	}
 
 }

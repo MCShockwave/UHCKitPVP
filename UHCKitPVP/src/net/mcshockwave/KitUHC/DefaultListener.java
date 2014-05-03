@@ -1,6 +1,7 @@
 package net.mcshockwave.KitUHC;
 
 import net.mcshockwave.KitUHC.Utils.LocUtils;
+import net.mcshockwave.UHC.worlds.Multiworld;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -48,6 +49,9 @@ public class DefaultListener implements Listener {
 	@EventHandler
 	public void onEntityRegainHealth(EntityRegainHealthEvent event) {
 		Entity e = event.getEntity();
+		if (KitUHC.isUHCEnabled()) {
+			return;
+		}
 		if (event.getRegainReason() == RegainReason.SATIATED) {
 			event.setCancelled(true);
 		}
@@ -82,7 +86,7 @@ public class DefaultListener implements Listener {
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		final Player p = event.getPlayer();
 
-		if (p.isOp()) {
+		if (p.isOp() && !KitUHC.isUHCEnabled()) {
 			event.setFormat("§c[§lOP§c]§r " + event.getFormat());
 		}
 	}
@@ -109,6 +113,10 @@ public class DefaultListener implements Listener {
 		Player p = event.getPlayer();
 		Block b = event.getBlock();
 
+		if (KitUHC.isUHCEnabled() && b.getWorld() != Multiworld.getKit()) {
+			return;
+		}
+
 		if (p.getGameMode() == GameMode.CREATIVE) {
 			event.setCancelled(false);
 			return;
@@ -134,6 +142,10 @@ public class DefaultListener implements Listener {
 		Player p = event.getPlayer();
 		Block b = event.getBlock();
 
+		if (KitUHC.isUHCEnabled() && b.getWorld() != Multiworld.getKit()) {
+			return;
+		}
+
 		if (p.getGameMode() == GameMode.CREATIVE) {
 			event.setCancelled(false);
 			return;
@@ -154,12 +166,14 @@ public class DefaultListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player p = event.getPlayer();
-		p.teleport(p.getWorld().getSpawnLocation());
-		p.getInventory().clear();
-		p.getInventory().setArmorContents(null);
-		p.setHealth(20);
-		KitUHC.updateHealth(p);
-		p.setLevel(0);
+		if (!KitUHC.isUHCEnabled()) {
+			p.teleport(p.getWorld().getSpawnLocation());
+			p.getInventory().clear();
+			p.getInventory().setArmorContents(null);
+			p.setHealth(20);
+			KitUHC.updateHealth(p);
+			p.setLevel(0);
+		}
 
 		if (!SQLTable.Stats.has("Username", p.getName())) {
 			SQLTable.Stats.add("Username", p.getName());
