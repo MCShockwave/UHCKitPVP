@@ -344,6 +344,10 @@ public class DefaultListener implements Listener {
 
 	@EventHandler
 	public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+		if (KitUHC.isUHCEnabled()) {
+			return;
+		}
+		
 		final Player p = event.getPlayer();
 		final ItemStack it = event.getItem();
 		if (it.getType() == Material.GOLDEN_APPLE) {
