@@ -1,5 +1,6 @@
 package net.mcshockwave.KitUHC;
 
+import net.mcshockwave.UHC.UltraHC;
 import net.mcshockwave.UHC.worlds.Multiworld;
 
 import org.bukkit.Bukkit;
@@ -347,7 +348,7 @@ public class DefaultListener implements Listener {
 		if (KitUHC.isUHCEnabled()) {
 			return;
 		}
-		
+
 		final Player p = event.getPlayer();
 		final ItemStack it = event.getItem();
 		if (it.getType() == Material.GOLDEN_APPLE) {
@@ -395,7 +396,8 @@ public class DefaultListener implements Listener {
 			cr += event.getDamage();
 			SQLTable.Stats.set("Credits", cr + "", "Username", d.getName());
 
-			if (d.getLocation().distanceSquared(p.getLocation()) >= 50 * 50) {
+			if ((KitUHC.isUHCEnabled() && !UltraHC.started || !KitUHC.isUHCEnabled())
+					&& d.getLocation().distanceSquared(p.getLocation()) >= 50 * 50) {
 				double dis = getRoundedDistance(p.getLocation(), d.getLocation());
 
 				Bukkit.broadcastMessage("§e" + d.getName() + " §csniped §e" + p.getName() + " §a(" + dis + " blocks)");
