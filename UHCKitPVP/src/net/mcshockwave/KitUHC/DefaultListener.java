@@ -39,10 +39,6 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
 
-import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.HologramFactory;
-
 public class DefaultListener implements Listener {
 
 	public HashMap<Player, Integer>	ks	= new HashMap<>();
@@ -266,20 +262,22 @@ public class DefaultListener implements Listener {
 			p.getWorld().strikeLightningEffect(p.getLocation());
 			k.setLevel(k.getLevel() + 1);
 
-			final Hologram dh = new HologramFactory(KitUHC.ins).withText("§c§lR.I.P.", event.getDeathMessage())
-					.withLocation(p.getEyeLocation()).build();
-			for (Player p2 : Bukkit.getOnlinePlayers()) {
-				if (!KitUHC.isHoloEnabled(p2.getName())) {
-					dh.clear(p2);
-				}
-			}
-			Bukkit.getScheduler().runTaskLater(KitUHC.ins, new Runnable() {
-				public void run() {
-					dh.clearAllPlayerViews();
-					HoloAPI.getManager().stopTracking(dh);
-					HoloAPI.getManager().clearFromFile(dh);
-				}
-			}, 100l);
+			// final Hologram dh = new
+			// HologramFactory(KitUHC.ins).withText("§c§lR.I.P.",
+			// event.getDeathMessage())
+			// .withLocation(p.getEyeLocation()).build();
+			// for (Player p2 : Bukkit.getOnlinePlayers()) {
+			// if (!KitUHC.isHoloEnabled(p2.getName())) {
+			// dh.clear(p2);
+			// }
+			// }
+			// Bukkit.getScheduler().runTaskLater(KitUHC.ins, new Runnable() {
+			// public void run() {
+			// dh.clearAllPlayerViews();
+			// HoloAPI.getManager().stopTracking(dh);
+			// HoloAPI.getManager().clearFromFile(dh);
+			// }
+			// }, 100l);
 		}
 
 		if (ks.containsKey(p)) {
