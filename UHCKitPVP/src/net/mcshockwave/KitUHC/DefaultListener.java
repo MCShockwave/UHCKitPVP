@@ -1,6 +1,7 @@
 package net.mcshockwave.KitUHC;
 
 import net.mcshockwave.KitUHC.Utils.LocUtils;
+import net.mcshockwave.UHC.UltraHC;
 import net.mcshockwave.UHC.worlds.Multiworld;
 
 import org.bukkit.Bukkit;
@@ -306,18 +307,21 @@ public class DefaultListener implements Listener {
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
 		Entity e = event.getEntity();
+		if (KitUHC.isUHCEnabled() && Multiworld.getKit() != e.getWorld()) {
+			return;
+		}
+
 		if (event.getEntity().getLocation().distanceSquared(event.getEntity().getWorld().getSpawnLocation()) < 16 * 16) {
 			event.setCancelled(true);
-		}
-		if (event.getEntity() instanceof Player) {
-			KitUHC.updateHealth((Player) event.getEntity());
 		}
 
 		if (e instanceof Player) {
 			final Player p = (Player) e;
+			
+			KitUHC.updateHealth(p);
 
 			final double health = p.getHealth();
-			Bukkit.getScheduler().runTaskLater(KitUHC.ins, new Runnable() {
+			Bukkit.getScheduler().runTaskLater(UltraHC.ins, new Runnable() {
 				public void run() {
 					double healthEnd = p.getHealth();
 					double damage = health - healthEnd;

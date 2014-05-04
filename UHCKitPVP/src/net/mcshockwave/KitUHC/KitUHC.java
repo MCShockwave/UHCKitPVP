@@ -128,7 +128,9 @@ public class KitUHC extends JavaPlugin {
 					p2.teleport(Multiworld.getLobby().getSpawnLocation());
 				}
 				
+				p.sendMessage("Deleting...");
 				UltraHC.deleteWorld(Multiworld.getKit());
+				p.sendMessage("Loading...");
 				Multiworld.loadAll();
 			}
 		}
@@ -142,6 +144,7 @@ public class KitUHC extends JavaPlugin {
 		}
 
 		Bukkit.getScheduler().runTaskLater(ins, new Runnable() {
+			@SuppressWarnings("deprecation")
 			public void run() {
 				Scoreboard s = Bukkit.getScoreboardManager().getMainScoreboard();
 
@@ -169,6 +172,10 @@ public class KitUHC extends JavaPlugin {
 
 		Bukkit.broadcastMessage("§eSetting up border...");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "wb " + w.getName() + " set 200 0 0");
+		
+		Bukkit.broadcastMessage("§eStarting fill task...");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "wb " + w.getName() + " fill");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "wb fill confirm");
 
 		Bukkit.broadcastMessage("§eGenerating walls...");
 		int rad = 200;
