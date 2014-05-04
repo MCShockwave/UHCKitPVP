@@ -203,7 +203,7 @@ public class DefaultListener implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		Location l = event.getEntity().getLocation();
 
-		if (KitUHC.isUHCEnabled() && l.getWorld() == Multiworld.getKit()) {
+		if (KitUHC.isUHCEnabled() && l.getWorld() != Multiworld.getKit()) {
 			return;
 		}
 		for (ItemStack it : event.getDrops()) {
