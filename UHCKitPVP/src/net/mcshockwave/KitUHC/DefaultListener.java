@@ -1,7 +1,5 @@
 package net.mcshockwave.KitUHC;
 
-import net.mcshockwave.KitUHC.Utils.LocUtils;
-import net.mcshockwave.UHC.UltraHC;
 import net.mcshockwave.UHC.worlds.Multiworld;
 
 import org.bukkit.Bukkit;
@@ -50,7 +48,7 @@ public class DefaultListener implements Listener {
 
 	@EventHandler
 	public void onEntityRegainHealth(EntityRegainHealthEvent event) {
-		Entity e = event.getEntity();
+		// Entity e = event.getEntity();
 		if (KitUHC.isUHCEnabled()) {
 			return;
 		}
@@ -60,28 +58,29 @@ public class DefaultListener implements Listener {
 		if (event.getEntity() instanceof Player) {
 			KitUHC.updateHealth((Player) event.getEntity());
 		}
-		if (e instanceof Player && event.getAmount() < 100) {
-			final Player p = (Player) e;
-			final double health = p.getHealth();
-			Bukkit.getScheduler().runTaskLater(KitUHC.ins, new Runnable() {
-				public void run() {
-					double healthEnd = p.getHealth();
-					double regain = healthEnd - health;
-					regain = (double) Math.round(regain * 10) / 10;
-					if (regain <= 0) {
-						return;
-					}
-					Hologram h = HoloAPI.getManager().createSimpleHologram(
-							LocUtils.addRand(p.getLocation().clone().add(0.5, 1, 0.5), 1, 0, 1), 1, true,
-							"§a§l+" + (regain * 5) + "%");
-					for (Player p2 : Bukkit.getOnlinePlayers()) {
-						if (!KitUHC.isHoloEnabled(p2.getName())) {
-							h.clear(p2);
-						}
-					}
-				}
-			}, 1l);
-		}
+		// if (e instanceof Player && event.getAmount() < 100) {
+		// final Player p = (Player) e;
+		// final double health = p.getHealth();
+		// Bukkit.getScheduler().runTaskLater(KitUHC.ins, new Runnable() {
+		// public void run() {
+		// double healthEnd = p.getHealth();
+		// double regain = healthEnd - health;
+		// regain = (double) Math.round(regain * 10) / 10;
+		// if (regain <= 0) {
+		// return;
+		// }
+		// Hologram h = HoloAPI.getManager().createSimpleHologram(
+		// LocUtils.addRand(p.getLocation().clone().add(0.5, 1, 0.5), 1, 0, 1),
+		// 1, true,
+		// "§a§l+" + (regain * 5) + "%");
+		// for (Player p2 : Bukkit.getOnlinePlayers()) {
+		// if (!KitUHC.isHoloEnabled(p2.getName())) {
+		// h.clear(p2);
+		// }
+		// }
+		// }
+		// }, 1l);
+		// }
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -317,28 +316,29 @@ public class DefaultListener implements Listener {
 
 		if (e instanceof Player) {
 			final Player p = (Player) e;
-			
+
 			KitUHC.updateHealth(p);
 
-			final double health = p.getHealth();
-			Bukkit.getScheduler().runTaskLater(UltraHC.ins, new Runnable() {
-				public void run() {
-					double healthEnd = p.getHealth();
-					double damage = health - healthEnd;
-					damage = (double) Math.round(damage * 10) / 10;
-					if (damage <= 0) {
-						return;
-					}
-					Hologram h = HoloAPI.getManager().createSimpleHologram(
-							LocUtils.addRand(p.getLocation().clone().add(0.5, 1, 0.5), 1, 0, 1), 1, true,
-							"§c§l-" + (damage * 5) + "%");
-					for (Player p2 : Bukkit.getOnlinePlayers()) {
-						if (!KitUHC.isHoloEnabled(p2.getName())) {
-							h.clear(p2);
-						}
-					}
-				}
-			}, 1l);
+			// final double health = p.getHealth();
+			// Bukkit.getScheduler().runTaskLater(UltraHC.ins, new Runnable() {
+			// public void run() {
+			// double healthEnd = p.getHealth();
+			// double damage = health - healthEnd;
+			// damage = (double) Math.round(damage * 10) / 10;
+			// if (damage <= 0) {
+			// return;
+			// }
+			// Hologram h = HoloAPI.getManager().createSimpleHologram(
+			// LocUtils.addRand(p.getLocation().clone().add(0.5, 1, 0.5), 1, 0,
+			// 1), 1, true,
+			// "§c§l-" + (damage * 5) + "%");
+			// for (Player p2 : Bukkit.getOnlinePlayers()) {
+			// if (!KitUHC.isHoloEnabled(p2.getName())) {
+			// h.clear(p2);
+			// }
+			// }
+			// }
+			// }, 1l);
 		}
 	}
 
