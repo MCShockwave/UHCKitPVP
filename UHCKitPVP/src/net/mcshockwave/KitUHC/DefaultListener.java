@@ -295,9 +295,11 @@ public class DefaultListener implements Listener {
 		event.getPlayer().getInventory().clear();
 		event.getPlayer().getInventory().setArmorContents(null);
 		KitUHC.updateHealth(event.getPlayer());
-		Team t = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(event.getPlayer());
-		if (t != null) {
-			t.removePlayer(event.getPlayer());
+		if (!KitUHC.isUHCEnabled()) {
+			Team t = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(event.getPlayer());
+			if (t != null) {
+				t.removePlayer(event.getPlayer());
+			}
 		}
 		event.getPlayer().setLevel(0);
 	}
