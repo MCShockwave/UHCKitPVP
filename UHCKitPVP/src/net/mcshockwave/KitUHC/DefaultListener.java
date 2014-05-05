@@ -259,7 +259,7 @@ public class DefaultListener implements Listener {
 					}
 				}
 			}, 1l);
-			p.getWorld().strikeLightningEffect(p.getLocation());
+			// p.getWorld().strikeLightningEffect(p.getLocation());
 			k.setLevel(k.getLevel() + 1);
 
 			// final Hologram dh = new
