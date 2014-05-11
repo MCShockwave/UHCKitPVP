@@ -176,12 +176,12 @@ public class DefaultListener implements Listener {
 			p.setLevel(0);
 		}
 
-		if (!SQLTable.Stats.has("Username", p.getName())) {
-			SQLTable.Stats.add("Username", p.getName());
-		}
-		if (!SQLTable.Settings.has("Username", p.getName())) {
-			SQLTable.Settings.add("Username", p.getName());
-		}
+		// if (!SQLTable.Stats.has("Username", p.getName())) {
+		// SQLTable.Stats.add("Username", p.getName());
+		// }
+		// if (!SQLTable.Settings.has("Username", p.getName())) {
+		// SQLTable.Settings.add("Username", p.getName());
+		// }
 	}
 
 	public boolean canUse(ItemStack it) {
@@ -217,14 +217,14 @@ public class DefaultListener implements Listener {
 		event.getDrops().clear();
 
 		final Player p = event.getEntity();
-		int de = SQLTable.Stats.getInt("Username", p.getName(), "Deaths");
-		de++;
-		SQLTable.Stats.set("Deaths", de + "", "Username", p.getName());
+		// int de = SQLTable.Stats.getInt("Username", p.getName(), "Deaths");
+		// de++;
+		// SQLTable.Stats.set("Deaths", de + "", "Username", p.getName());
 		if (p.getKiller() != null) {
 			final Player k = p.getKiller();
-			int ki = SQLTable.Stats.getInt("Username", k.getName(), "Kills");
-			ki++;
-			SQLTable.Stats.set("Kills", ki + "", "Username", k.getName());
+			// int ki = SQLTable.Stats.getInt("Username", k.getName(), "Kills");
+			// ki++;
+			// SQLTable.Stats.set("Kills", ki + "", "Username", k.getName());
 
 			if (!ks.containsKey(k)) {
 				ks.put(k, 0);
@@ -243,22 +243,26 @@ public class DefaultListener implements Listener {
 					}
 				}, 5);
 			}
-			Bukkit.getScheduler().runTaskLater(KitUHC.ins, new Runnable() {
-				public void run() {
-					int high = SQLTable.Stats.getInt("Username", k.getName(), "Highest_KS");
-					if (kisf > high) {
-						SQLTable.Stats.set("Highest_KS", kisf + "", "Username", k.getName());
-						for (Player p2 : Bukkit.getOnlinePlayers()) {
-							if (p2 == k) {
-								p2.sendMessage("§aYou have a new highest kill streak of " + kisf + "!");
-							} else {
-								p2.sendMessage("§a" + k.getName()
-										+ " has earned a new highest personal kill streak of " + kisf + "!");
-							}
-						}
-					}
-				}
-			}, 1l);
+			// Bukkit.getScheduler().runTaskLater(KitUHC.ins, new Runnable() {
+			// public void run() {
+			// int high = SQLTable.Stats.getInt("Username", k.getName(),
+			// "Highest_KS");
+			// if (kisf > high) {
+			// SQLTable.Stats.set("Highest_KS", kisf + "", "Username",
+			// k.getName());
+			// for (Player p2 : Bukkit.getOnlinePlayers()) {
+			// if (p2 == k) {
+			// p2.sendMessage("§aYou have a new highest kill streak of " + kisf
+			// + "!");
+			// } else {
+			// p2.sendMessage("§a" + k.getName()
+			// + " has earned a new highest personal kill streak of " + kisf +
+			// "!");
+			// }
+			// }
+			// }
+			// }
+			// }, 1l);
 			// p.getWorld().strikeLightningEffect(p.getLocation());
 			k.setLevel(k.getLevel() + 1);
 
@@ -392,9 +396,10 @@ public class DefaultListener implements Listener {
 			} else
 				d = (Player) de;
 
-			int cr = SQLTable.Stats.getInt("Username", d.getName(), "Credits");
-			cr += event.getDamage();
-			SQLTable.Stats.set("Credits", cr + "", "Username", d.getName());
+			// int cr = SQLTable.Stats.getInt("Username", d.getName(),
+			// "Credits");
+			// cr += event.getDamage();
+			// SQLTable.Stats.set("Credits", cr + "", "Username", d.getName());
 
 			if ((KitUHC.isUHCEnabled() && !UltraHC.started || !KitUHC.isUHCEnabled())
 					&& d.getLocation().distanceSquared(p.getLocation()) >= 50 * 50) {

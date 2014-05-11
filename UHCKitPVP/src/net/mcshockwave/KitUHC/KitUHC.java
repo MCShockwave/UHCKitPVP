@@ -1,6 +1,5 @@
 package net.mcshockwave.KitUHC;
 
-import net.mcshockwave.KitUHC.HoF.HallOfFame;
 import net.mcshockwave.KitUHC.Menu.ItemMenuListener;
 import net.mcshockwave.UHC.UltraHC;
 import net.mcshockwave.UHC.worlds.Multiworld;
@@ -44,10 +43,6 @@ public class KitUHC extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new DefaultListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ItemMenuListener(), this);
 
-		SQLTable.enable();
-
-		saveDefaultConfig();
-
 		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
 			ProtocolManager pm = ProtocolLibrary.getProtocolManager();
 			PacketAdapter pa = null;
@@ -73,11 +68,6 @@ public class KitUHC extends JavaPlugin {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (label.equalsIgnoreCase("hof")) {
-			HallOfFame.getMenu().open((Player) sender);
-			return true;
-		}
-
 		if (label.equalsIgnoreCase("spawn") && sender instanceof Player) {
 			Player p = (Player) sender;
 
@@ -92,18 +82,19 @@ public class KitUHC extends JavaPlugin {
 			return true;
 		}
 
-		if (label.equalsIgnoreCase("tog") && args.length > 0) {
-			String toTog = args[0];
-
-			if (toTog.equalsIgnoreCase("holo")) {
-				boolean is = isHoloEnabled(sender.getName());
-				SQLTable.Settings.set("Enable_Holo", "" + (is ? 0 : 1), "Username", sender.getName());
-
-				sender.sendMessage("§aHolograms toggled " + (is ? "OFF" : "ON"));
-			}
-
-			return true;
-		}
+		// if (label.equalsIgnoreCase("tog") && args.length > 0) {
+		// String toTog = args[0];
+		//
+		// if (toTog.equalsIgnoreCase("holo")) {
+		// boolean is = isHoloEnabled(sender.getName());
+		// SQLTable.Settings.set("Enable_Holo", "" + (is ? 0 : 1), "Username",
+		// sender.getName());
+		//
+		// sender.sendMessage("§aHolograms toggled " + (is ? "OFF" : "ON"));
+		// }
+		//
+		// return true;
+		// }
 
 		if (sender instanceof Player && sender.isOp()) {
 			Player p = (Player) sender;
@@ -122,12 +113,12 @@ public class KitUHC extends JavaPlugin {
 
 				setUp(w);
 			}
-			
+
 			if (isUHCEnabled() && args[0].equalsIgnoreCase("regenWorld")) {
 				for (Player p2 : Multiworld.getKit().getPlayers()) {
 					p2.teleport(Multiworld.getLobby().getSpawnLocation());
 				}
-				
+
 				p.sendMessage("Deleting...");
 				UltraHC.deleteWorld(Multiworld.getKit());
 				p.sendMessage("Loading...");
@@ -161,7 +152,7 @@ public class KitUHC extends JavaPlugin {
 
 	public static void setUp(World w) {
 		Bukkit.broadcastMessage("§a§nSetting up world...§r\n ");
-		
+
 		Bukkit.broadcastMessage("§eSetting gamerules...");
 		String[] rules = { "doMobSpawning:false", "doDaylightCycle:false", "doFireTick:false", "doMobLoot:false",
 				"doTileDrops:false", "mobGriefing:false" };
@@ -172,7 +163,7 @@ public class KitUHC extends JavaPlugin {
 
 		Bukkit.broadcastMessage("§eSetting up border...");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "wb " + w.getName() + " set 200 0 0");
-		
+
 		Bukkit.broadcastMessage("§eStarting fill task...");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "wb " + w.getName() + " fill");
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "wb fill confirm");
@@ -196,7 +187,7 @@ public class KitUHC extends JavaPlugin {
 
 		Location ench = new Location(w, 0, w.getHighestBlockYAt(0, 0), 0);
 		loadSchematic("uhcKitEnchanting", ench);
-		
+
 		Bukkit.broadcastMessage("§eSetting spawn point...");
 		w.setSpawnLocation(0, 32, 0);
 
@@ -224,9 +215,9 @@ public class KitUHC extends JavaPlugin {
 		}
 	}
 
-	public static boolean isHoloEnabled(String pl) {
-		return SQLTable.Settings.getInt("Username", pl, "Enable_Holo") == 1;
-	}
+	// public static boolean isHoloEnabled(String pl) {
+	// return SQLTable.Settings.getInt("Username", pl, "Enable_Holo") == 1;
+	// }
 
 	public static boolean isUHCEnabled() {
 		return Bukkit.getPluginManager().isPluginEnabled("MCShockwaveUHC");
