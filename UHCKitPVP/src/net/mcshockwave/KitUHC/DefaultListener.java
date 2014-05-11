@@ -427,6 +427,10 @@ public class DefaultListener implements Listener {
 		Item i = event.getItem();
 		ItemStack it = i.getItemStack();
 
+		if (KitUHC.isUHCEnabled() && p.getWorld() != Multiworld.getKit()) {
+			return;
+		}
+
 		if (it.getType() == Material.GOLDEN_APPLE) {
 			int am = it.getAmount();
 			int ha = getAmount(p.getInventory(), Material.GOLDEN_APPLE);
