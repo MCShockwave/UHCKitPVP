@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -42,7 +43,7 @@ public class KitUHC extends JavaPlugin {
 		ins = this;
 		Bukkit.getPluginManager().registerEvents(new DefaultListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ItemMenuListener(), this);
-		
+
 		saveDefaultConfig();
 
 		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
@@ -72,6 +73,14 @@ public class KitUHC extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (label.equalsIgnoreCase("spawn") && sender instanceof Player) {
 			Player p = (Player) sender;
+
+			int r = 25;
+			for (Entity e : p.getNearbyEntities(r, r, r)) {
+				if (e instanceof Player && e != p) {
+					p.sendMessage("§cYou cannot do that while players are nearby!");
+					return true;
+				}
+			}
 
 			p.teleport(p.getWorld().getSpawnLocation());
 			p.sendMessage("§aTeleported to spawn");
