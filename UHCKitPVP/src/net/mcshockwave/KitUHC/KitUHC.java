@@ -42,6 +42,8 @@ public class KitUHC extends JavaPlugin {
 		ins = this;
 		Bukkit.getPluginManager().registerEvents(new DefaultListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ItemMenuListener(), this);
+		
+		saveDefaultConfig();
 
 		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
 			ProtocolManager pm = ProtocolLibrary.getProtocolManager();
