@@ -36,7 +36,8 @@ public class CustomBlock {
 	}
 
 	public void regen() {
-		state.getWorld().playEffect(state.getLocation(), Effect.STEP_SOUND, state.getBlock().getType());
+		state.getWorld().playEffect(state.getLocation(), Effect.STEP_SOUND,
+				state.getType() == Material.AIR ? state.getBlock().getType() : state.getType());
 
 		state.update(true);
 		removeBlock(this);
