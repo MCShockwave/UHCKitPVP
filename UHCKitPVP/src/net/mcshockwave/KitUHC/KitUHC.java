@@ -39,6 +39,8 @@ public class KitUHC extends JavaPlugin {
 
 	public static KitUHC	ins;
 
+	public static boolean	enabled;
+
 	public void onEnable() {
 		ins = this;
 		Bukkit.getPluginManager().registerEvents(new DefaultListener(), this);
@@ -89,6 +91,17 @@ public class KitUHC extends JavaPlugin {
 			p.setHealth(20);
 			updateHealth(p);
 			p.setLevel(0);
+
+			return true;
+		}
+
+		if (label.equalsIgnoreCase("disablearena")) {
+
+			if (sender.isOp()) {
+				enabled = !enabled;
+
+				Bukkit.broadcastMessage("§cArena " + (enabled ? "enabled" : "disabled") + " by " + sender.getName());
+			}
 
 			return true;
 		}

@@ -97,9 +97,13 @@ public class DefaultListener implements Listener {
 
 		if (b != null) {
 			if (b.getType() == Material.WALL_SIGN) {
-				Sign s = (Sign) b.getState();
-				if (s.getLine(0).equalsIgnoreCase("[Kit]")) {
-					Kit.getMenu(p).open(p);
+				if (KitUHC.enabled) {
+					Sign s = (Sign) b.getState();
+					if (s.getLine(0).equalsIgnoreCase("[Kit]")) {
+						Kit.getMenu(p).open(p);
+					}
+				} else {
+					p.sendMessage("§cThe PVP arena is disabled!");
 				}
 			}
 		}
