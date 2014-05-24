@@ -39,7 +39,7 @@ public class KitUHC extends JavaPlugin {
 
 	public static KitUHC	ins;
 
-	public static boolean	enabled;
+	public static boolean	enabled	= true;
 
 	public void onEnable() {
 		ins = this;
@@ -95,7 +95,7 @@ public class KitUHC extends JavaPlugin {
 			return true;
 		}
 
-		if (label.equalsIgnoreCase("disablearena")) {
+		if (label.equalsIgnoreCase("arenatog")) {
 
 			if (sender.isOp()) {
 				enabled = !enabled;

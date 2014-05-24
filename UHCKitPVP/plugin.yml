@@ -8,4 +8,4 @@ commands:
    uhckits:
    spawn:
    tog:
-   disablearena:
+   arenatog:
