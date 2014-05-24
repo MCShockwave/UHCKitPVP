@@ -137,8 +137,7 @@ public class DefaultListener implements Listener {
 			CustomBlock.removeBlock(CustomBlock.getBlockAt(b));
 		}
 
-		@SuppressWarnings("deprecation")
-		CustomBlock cb = new CustomBlock(b, b.getType(), b.getData(), p.getName());
+		CustomBlock cb = new CustomBlock(b, p.getName(), false);
 		cb.setTime(60);
 	}
 
@@ -164,7 +163,7 @@ public class DefaultListener implements Listener {
 			CustomBlock.removeBlock(CustomBlock.getBlockAt(b));
 		}
 
-		CustomBlock cb = new CustomBlock(b, Material.AIR, 0, p.getName());
+		CustomBlock cb = new CustomBlock(b, p.getName(), true);
 		cb.setTime(60);
 	}
 

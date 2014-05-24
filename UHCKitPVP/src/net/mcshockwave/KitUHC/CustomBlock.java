@@ -1,36 +1,30 @@
 package net.mcshockwave.KitUHC;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
-import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("deprecation")
 public class CustomBlock {
-	Block							block;
-	Material						m;
-	byte							d;
-	MaterialData					bs;
+	BlockState						state;
 	String							player;
-	
-	BukkitTask remTask = null;
+
+	BukkitTask						remTask	= null;
 
 	static ArrayList<CustomBlock>	blocks	= new ArrayList<>();
 
-	CustomBlock(Block b, Material ma, int da, String pl) {
-		block = b;
-		m = ma;
-		d = (byte) da;
-		if (m != Material.AIR) {
-			bs = b.getState().getData();
-		} else {
-			bs = null;
-		}
+	CustomBlock(Block b, String pl, boolean isAir) {
+		state = b.getState();
 		player = pl;
+
+		if (isAir) {
+			state.setType(Material.AIR);
+		}
 	}
 
 	public void setTime(int time) {
@@ -42,29 +36,18 @@ public class CustomBlock {
 	}
 
 	public void regen() {
-		if (bs != null) {
-			setState(this, bs);
-		} else {
-			getBlock().setType(m);
-			getBlock().setData(d);
-		}
+		state.getWorld().playEffect(state.getLocation(), Effect.STEP_SOUND, state.getBlock().getType());
+
+		state.update(true);
 		removeBlock(this);
-		
+
 		if (remTask != null) {
 			remTask.cancel();
 		}
 	}
 
-	public Block getBlock() {
-		return block;
-	}
-
-	public Material getType() {
-		return m;
-	}
-
-	public byte getData() {
-		return d;
+	public BlockState getState() {
+		return state;
 	}
 
 	public String getPlayerName() {
@@ -81,7 +64,7 @@ public class CustomBlock {
 
 	public static CustomBlock getBlockAt(Block block) {
 		for (CustomBlock b : getBlocks()) {
-			if (b.getBlock() == block) {
+			if (b.state.getBlock().equals(block)) {
 				return b;
 			}
 		}
@@ -103,17 +86,5 @@ public class CustomBlock {
 			}
 		}
 		return ret.toArray(new CustomBlock[0]);
-	}
-
-	public static Block setState(CustomBlock b, MaterialData md) {
-		return setState(b.getBlock(), md);
-	}
-
-	public static Block setState(Block b, MaterialData md) {
-		b.setType(md.getItemType());
-		b.setData(md.getData());
-		b.getState().setData(md);
-
-		return b;
 	}
 }
