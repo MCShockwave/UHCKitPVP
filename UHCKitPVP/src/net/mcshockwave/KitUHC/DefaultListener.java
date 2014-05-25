@@ -1,5 +1,6 @@
 package net.mcshockwave.KitUHC;
 
+import net.mcshockwave.KitUHC.Utils.ItemMetaUtils;
 import net.mcshockwave.UHC.UltraHC;
 import net.mcshockwave.UHC.worlds.Multiworld;
 
@@ -34,10 +35,12 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
+import java.util.Random;
 
 public class DefaultListener implements Listener {
 
@@ -198,8 +201,11 @@ public class DefaultListener implements Listener {
 		return false;
 	}
 
+	Random	rand	= new Random();
+
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
+		final Player p = event.getEntity();
 		Location l = event.getEntity().getLocation();
 
 		if (KitUHC.isUHCEnabled() && l.getWorld() != Multiworld.getKit()) {
@@ -207,9 +213,6 @@ public class DefaultListener implements Listener {
 		}
 		for (ItemStack it : event.getDrops()) {
 			final Item i = l.getWorld().dropItemNaturally(l, it);
-			if (it.getType() == Material.GOLDEN_APPLE) {
-				continue;
-			}
 			i.setPickupDelay(Integer.MAX_VALUE);
 			Bukkit.getScheduler().runTaskLater(KitUHC.ins, new Runnable() {
 				public void run() {
@@ -218,8 +221,12 @@ public class DefaultListener implements Listener {
 			}, 60l);
 		}
 		event.getDrops().clear();
+		event.getDrops().add(new ItemStack(Material.GOLDEN_APPLE, rand.nextInt(3) + 1));
+		event.getDrops().add(
+				ItemMetaUtils.setLore(
+						ItemMetaUtils.setItemName(new ItemStack(Material.GOLDEN_APPLE, 1), "§6Golden Head"),
+						"§eObtained from killing:", "§e§l" + p.getName()));
 
-		final Player p = event.getEntity();
 		// int de = SQLTable.Stats.getInt("Username", p.getName(), "Deaths");
 		// de++;
 		// SQLTable.Stats.set("Deaths", de + "", "Username", p.getName());
@@ -358,10 +365,16 @@ public class DefaultListener implements Listener {
 
 		final Player p = event.getPlayer();
 		final ItemStack it = event.getItem();
-		if (it.getType() == Material.GOLDEN_APPLE) {
-			Bukkit.getScheduler().runTask(KitUHC.ins, new Runnable() {
+		if (it.getType() == Material.GOLDEN_APPLE && !KitUHC.isUHCEnabled()) {
+			Bukkit.getScheduler().runTask(UltraHC.ins, new Runnable() {
 				public void run() {
 					p.removePotionEffect(PotionEffectType.ABSORPTION);
+
+					if (ItemMetaUtils.hasCustomName(it)
+							&& ItemMetaUtils.getItemName(it).equalsIgnoreCase("§6Golden Head")) {
+						p.removePotionEffect(PotionEffectType.REGENERATION);
+						p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 180, 1));
+					}
 				}
 			});
 		}
@@ -443,7 +456,8 @@ public class DefaultListener implements Listener {
 			event.setCancelled(true);
 			i.remove();
 			if (gi > 0) {
-				p.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, gi));
+				it.setAmount(gi);
+				p.getInventory().addItem(it);
 				return;
 			}
 		}

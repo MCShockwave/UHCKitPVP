@@ -133,7 +133,15 @@ public enum Kit {
 	public void onSelect(Player p) {
 		p.getInventory().clear();
 		p.getInventory().setArmorContents(acontents);
-		p.getInventory().addItem(give);
+		for (ItemStack it : give) {
+			if (it.getType() == Material.ARROW) {
+				p.getInventory().setItem(17, it);
+			} else if (it.getType() == Material.GOLDEN_APPLE) {
+				p.getInventory().setItem(7, it);
+			} else {
+				p.getInventory().addItem(it);
+			}
+		}
 		p.getInventory().setItem(8, new ItemStack(Material.STONE_PICKAXE));
 		p.teleport(getSpawn(p.getWorld()));
 		KitUHC.updateHealth(p);
@@ -154,9 +162,8 @@ public enum Kit {
 	public static String shorten(String s, int len) {
 		if (s.length() > len) {
 			return s.substring(0, len);
-		} else {
-			return s;
 		}
+		return s;
 	}
 
 	public static ItemMenu getMenu(Player p) {

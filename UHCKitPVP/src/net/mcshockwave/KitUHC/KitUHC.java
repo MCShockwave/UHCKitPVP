@@ -101,6 +101,10 @@ public class KitUHC extends JavaPlugin {
 				enabled = !enabled;
 
 				Bukkit.broadcastMessage("§cArena " + (enabled ? "enabled" : "disabled") + " by " + sender.getName());
+				
+				for (CustomBlock cb : CustomBlock.getBlocks()) {
+					cb.regen();
+				}
 			}
 
 			return true;
