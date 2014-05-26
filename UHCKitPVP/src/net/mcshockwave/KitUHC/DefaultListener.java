@@ -212,6 +212,9 @@ public class DefaultListener implements Listener {
 			return;
 		}
 		for (ItemStack it : event.getDrops()) {
+			if (it.getType() == Material.GOLDEN_APPLE) {
+				continue;
+			}
 			final Item i = l.getWorld().dropItemNaturally(l, it);
 			i.setPickupDelay(Integer.MAX_VALUE);
 			Bukkit.getScheduler().runTaskLater(KitUHC.ins, new Runnable() {
@@ -221,7 +224,7 @@ public class DefaultListener implements Listener {
 			}, 60l);
 		}
 		event.getDrops().clear();
-		event.getDrops().add(new ItemStack(Material.GOLDEN_APPLE, rand.nextInt(3) + 1));
+		event.getDrops().add(new ItemStack(Material.GOLDEN_APPLE, rand.nextInt(2)));
 		event.getDrops().add(
 				ItemMetaUtils.setLore(
 						ItemMetaUtils.setItemName(new ItemStack(Material.GOLDEN_APPLE, 1), "§6Golden Head"),
