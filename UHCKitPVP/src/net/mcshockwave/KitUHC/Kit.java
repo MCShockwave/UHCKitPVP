@@ -122,6 +122,23 @@ public enum Kit {
 		}
 	}
 
+	public static Kit getCurrentKit() {
+		return values()[KitUHC.currentid];
+	}
+
+	public static void cycle(World kitworld) {
+		KitUHC.currentid = rand.nextInt(values().length);
+
+		Kit cur = getCurrentKit();
+
+		for (Player p : kitworld.getPlayers()) {
+			if (KitUHC.isInArena(p.getLocation())) {
+				cur.onSelect(p, false);
+			}
+			p.sendMessage("§aKit cycled to: §6" + cur.name);
+		}
+	}
+
 	private static ItemStack i(Material m) {
 		return new ItemStack(m);
 	}
@@ -130,7 +147,7 @@ public enum Kit {
 		return new ItemStack(m, amount);
 	}
 
-	public void onSelect(Player p) {
+	public void onSelect(Player p, boolean enter) {
 		p.getInventory().clear();
 		p.getInventory().setArmorContents(acontents);
 		for (ItemStack it : give) {
@@ -143,19 +160,25 @@ public enum Kit {
 			}
 		}
 		p.getInventory().setItem(8, new ItemStack(Material.STONE_PICKAXE));
-		p.teleport(getSpawn(p.getWorld()));
-		KitUHC.updateHealth(p);
+		if (enter) {
+			p.teleport(getSpawn(p.getWorld()));
+			KitUHC.updateHealth(p);
 
-		if (team != null) {
-			team.addPlayer(p);
-			p.setPlayerListName(shorten(p.getName(), 11) + "§r");
+			if (team != null) {
+				team.addPlayer(p);
+				p.setPlayerListName(shorten(p.getName(), 11) + "§r");
+			}
 		}
 
+		double health = 20;
 		if (this == Half_Heart_Warrior) {
-			p.setHealth(1);
+			health = 1;
 		}
 		if (this == Half_Health_Tank) {
-			p.setHealth(9);
+			health = 9;
+		}
+		if (p.getHealth() > health) {
+			p.setHealth(health);
 		}
 	}
 
@@ -174,7 +197,7 @@ public enum Kit {
 			Button b = new Button(true, k.m, k.am, k.data, k.name, "", "Click to use");
 			b.setOnClick(new ButtonRunnable() {
 				public void run(Player p, InventoryClickEvent event) {
-					k.onSelect(p);
+					k.onSelect(p, true);
 				}
 			});
 			m.addButton(b, i);

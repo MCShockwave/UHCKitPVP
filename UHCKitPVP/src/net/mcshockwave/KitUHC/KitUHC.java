@@ -16,6 +16,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.io.File;
+import java.util.Random;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -39,7 +40,13 @@ public class KitUHC extends JavaPlugin {
 
 	public static KitUHC	ins;
 
-	public static boolean	enabled	= true;
+	public static boolean	enabled			= true;
+
+	public static int		currentid		= 0;
+
+	public static final int	CYCLE_INTERVAL	= 3;
+
+	public Random			rand			= new Random();
 
 	public void onEnable() {
 		ins = this;
@@ -63,6 +70,21 @@ public class KitUHC extends JavaPlugin {
 			}
 			pm.addPacketListener(pa);
 		}
+
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			public void run() {
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					if (KitUHC.isUHCEnabled() && Multiworld.getKit() != p.getWorld()) {
+						continue;
+					}
+
+					if (isInArena(p.getLocation())) {
+						Kit.cycle(p.getWorld());
+						break;
+					}
+				}
+			}
+		}, 0, CYCLE_INTERVAL * 1200);
 	}
 
 	public void onDisable() {
@@ -101,7 +123,7 @@ public class KitUHC extends JavaPlugin {
 				enabled = !enabled;
 
 				Bukkit.broadcastMessage("§cArena " + (enabled ? "enabled" : "disabled") + " by " + sender.getName());
-				
+
 				for (CustomBlock cb : CustomBlock.getBlocks()) {
 					cb.regen();
 				}
@@ -249,6 +271,10 @@ public class KitUHC extends JavaPlugin {
 
 	public static boolean isUHCEnabled() {
 		return Bukkit.getPluginManager().isPluginEnabled("MCShockwaveUHC");
+	}
+
+	public static boolean isInArena(Location l) {
+		return l.distanceSquared(l.getWorld().getSpawnLocation()) > 16 * 16;
 	}
 
 }

@@ -100,13 +100,23 @@ public class DefaultListener implements Listener {
 
 		if (b != null) {
 			if (b.getType() == Material.WALL_SIGN) {
-				if (KitUHC.enabled) {
-					Sign s = (Sign) b.getState();
-					if (s.getLine(0).equalsIgnoreCase("[Kit]")) {
-						Kit.getMenu(p).open(p);
+				Sign s = (Sign) b.getState();
+				boolean cont = false;
+				for (int i = 0; i < 3; i++) {
+					if (s.getLine(i).toLowerCase().contains("[kit]")) {
+						cont = true;
 					}
-				} else {
-					p.sendMessage("§cThe PVP arena is disabled!");
+				}
+				if (cont) {
+					if (KitUHC.enabled) {
+						// Sign s = (Sign) b.getState();
+						// if (s.getLine(0).equalsIgnoreCase("[Kit]")) {
+						// Kit.getMenu(p).open(p);
+						// }
+						Kit.getCurrentKit().onSelect(p, true);
+					} else {
+						p.sendMessage("§cThe PVP arena is disabled!");
+					}
 				}
 			}
 		}
@@ -328,7 +338,7 @@ public class DefaultListener implements Listener {
 			return;
 		}
 
-		if (event.getEntity().getLocation().distanceSquared(event.getEntity().getWorld().getSpawnLocation()) < 16 * 16) {
+		if (!KitUHC.isInArena(e.getLocation())) {
 			event.setCancelled(true);
 		}
 
