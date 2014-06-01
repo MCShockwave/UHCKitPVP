@@ -162,8 +162,6 @@ public enum Kit {
 		p.getInventory().setItem(8, new ItemStack(Material.STONE_PICKAXE));
 		if (enter) {
 			p.teleport(getSpawn(p.getWorld()));
-			KitUHC.updateHealth(p);
-
 			if (team != null) {
 				team.addPlayer(p);
 				p.setPlayerListName(shorten(p.getName(), 11) + "§r");
@@ -171,15 +169,20 @@ public enum Kit {
 		}
 
 		double health = 20;
+		double maxhealth = 20;
 		if (this == Half_Heart_Warrior) {
 			health = 1;
+			maxhealth = 6;
 		}
 		if (this == Half_Health_Tank) {
 			health = 9;
+			maxhealth = 16;
 		}
 		if (p.getHealth() > health) {
 			p.setHealth(health);
 		}
+		p.setMaxHealth(maxhealth);
+		KitUHC.updateHealth(p);
 	}
 
 	public static String shorten(String s, int len) {

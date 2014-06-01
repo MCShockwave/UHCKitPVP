@@ -321,6 +321,7 @@ public class DefaultListener implements Listener {
 		event.setRespawnLocation(event.getPlayer().getWorld().getSpawnLocation());
 		event.getPlayer().getInventory().clear();
 		event.getPlayer().getInventory().setArmorContents(null);
+		event.getPlayer().setMaxHealth(20);
 		KitUHC.updateHealth(event.getPlayer());
 		if (!KitUHC.isUHCEnabled()) {
 			Team t = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(event.getPlayer());
