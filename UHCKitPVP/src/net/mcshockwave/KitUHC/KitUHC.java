@@ -174,6 +174,10 @@ public class KitUHC extends JavaPlugin {
 				p.sendMessage("Loading...");
 				Multiworld.loadAll();
 			}
+
+			if (isUHCEnabled() && args[0].equalsIgnoreCase("cycle")) {
+				Kit.cycle(Multiworld.getKit());
+			}
 		}
 		return false;
 	}
