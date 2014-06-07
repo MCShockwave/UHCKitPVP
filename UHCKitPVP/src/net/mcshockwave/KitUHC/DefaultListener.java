@@ -399,7 +399,7 @@ public class DefaultListener implements Listener {
 		if (KitUHC.isUHCEnabled()) {
 			return;
 		}
-		event.setMotd("§cMCShockwave §7UHC §8- §a[Kit PVP]");
+		event.setMotd("§cMCShockwave §7UHC §8- §a[Open PvP]");
 	}
 
 	@EventHandler
