@@ -147,6 +147,7 @@ public enum Kit {
 		return new ItemStack(m, amount);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void onSelect(Player p, boolean enter) {
 		p.getInventory().clear();
 		p.getInventory().setArmorContents(acontents);
@@ -183,6 +184,8 @@ public enum Kit {
 		}
 		p.setMaxHealth(maxhealth);
 		KitUHC.updateHealth(p);
+
+		p.updateInventory();
 	}
 
 	public static String shorten(String s, int len) {
