@@ -146,12 +146,10 @@ public class DefaultListener implements Listener {
 			return;
 		}
 
-		if (CustomBlock.getBlockAt(b.getLocation()) != null) {
-			CustomBlock.removeBlock(CustomBlock.getBlockAt(b.getLocation()));
+		if (CustomBlock.getBlockAt(b.getLocation()) == null) {
+			CustomBlock cb = new CustomBlock(b, p.getName(), false);
+			cb.setTime(60);
 		}
-
-		CustomBlock cb = new CustomBlock(b, p.getName(), false);
-		cb.setTime(60);
 	}
 
 	@EventHandler
@@ -172,12 +170,10 @@ public class DefaultListener implements Listener {
 			event.setCancelled(true);
 		}
 
-		if (CustomBlock.getBlockAt(b.getLocation()) != null) {
-			CustomBlock.removeBlock(CustomBlock.getBlockAt(b.getLocation()));
+		if (CustomBlock.getBlockAt(b.getLocation()) == null) {
+			CustomBlock cb = new CustomBlock(b, p.getName(), true);
+			cb.setTime(60);
 		}
-
-		CustomBlock cb = new CustomBlock(b, p.getName(), true);
-		cb.setTime(60);
 	}
 
 	@EventHandler
