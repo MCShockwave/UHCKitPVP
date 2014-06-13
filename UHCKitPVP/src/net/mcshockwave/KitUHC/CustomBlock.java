@@ -26,6 +26,8 @@ public class CustomBlock {
 		if (isAir) {
 			state.setType(Material.AIR);
 		}
+
+		blocks.add(this);
 	}
 
 	public void setTime(int time) {
@@ -64,14 +66,19 @@ public class CustomBlock {
 		return blocks.toArray(new CustomBlock[0]);
 	}
 
-	public static CustomBlock getBlockAt(Location loc) {
+	public static CustomBlock getBlockAt(Location l1) {
 		for (CustomBlock b : getBlocks()) {
-			if (b.state.getBlock().getLocation()
-					.equals(new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))) {
+			Location l2 = b.state.getLocation();
+			if (isSameLoc(l1, l2)) {
 				return b;
 			}
 		}
 		return null;
+	}
+
+	private static boolean isSameLoc(Location loc1, Location loc2) {
+		return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY()
+				&& loc1.getBlockZ() == loc2.getBlockZ() && loc1.getWorld() == loc2.getWorld();
 	}
 
 	public static void removeBlock(CustomBlock b) {

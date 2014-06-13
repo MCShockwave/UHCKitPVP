@@ -140,8 +140,7 @@ public class DefaultListener implements Listener {
 			return;
 		}
 
-		if (b.getLocation().distanceSquared(b.getWorld().getSpawnLocation()) < 18 * 18
-				|| b.getType() == Material.COBBLESTONE) {
+		if (b.getLocation().distanceSquared(b.getWorld().getSpawnLocation()) < 18 * 18) {
 			event.setCancelled(true);
 			return;
 		}
@@ -172,7 +171,7 @@ public class DefaultListener implements Listener {
 
 		if (CustomBlock.getBlockAt(b.getLocation()) == null) {
 			CustomBlock cb = new CustomBlock(b, p.getName(), true);
-			cb.setTime(30);
+			cb.setTime(60);
 		}
 	}
 
