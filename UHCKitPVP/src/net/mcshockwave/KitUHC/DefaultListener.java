@@ -148,7 +148,7 @@ public class DefaultListener implements Listener {
 
 		if (CustomBlock.getBlockAt(b.getLocation()) == null) {
 			CustomBlock cb = new CustomBlock(b, p.getName(), false);
-			cb.setTime(60);
+			cb.setTime(30);
 		}
 	}
 
@@ -172,7 +172,7 @@ public class DefaultListener implements Listener {
 
 		if (CustomBlock.getBlockAt(b.getLocation()) == null) {
 			CustomBlock cb = new CustomBlock(b, p.getName(), true);
-			cb.setTime(60);
+			cb.setTime(30);
 		}
 	}
 
