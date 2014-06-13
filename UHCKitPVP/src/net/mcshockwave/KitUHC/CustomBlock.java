@@ -2,6 +2,7 @@ package net.mcshockwave.KitUHC;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -63,9 +64,10 @@ public class CustomBlock {
 		return blocks.toArray(new CustomBlock[0]);
 	}
 
-	public static CustomBlock getBlockAt(Block block) {
+	public static CustomBlock getBlockAt(Location loc) {
 		for (CustomBlock b : getBlocks()) {
-			if (b.state.getBlock().equals(block)) {
+			if (b.state.getBlock().getLocation()
+					.equals(new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))) {
 				return b;
 			}
 		}

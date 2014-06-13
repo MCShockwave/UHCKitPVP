@@ -146,8 +146,8 @@ public class DefaultListener implements Listener {
 			return;
 		}
 
-		if (CustomBlock.blocks.contains(CustomBlock.getBlockAt(b))) {
-			CustomBlock.removeBlock(CustomBlock.getBlockAt(b));
+		if (CustomBlock.getBlockAt(b.getLocation()) != null) {
+			CustomBlock.removeBlock(CustomBlock.getBlockAt(b.getLocation()));
 		}
 
 		CustomBlock cb = new CustomBlock(b, p.getName(), false);
@@ -172,8 +172,8 @@ public class DefaultListener implements Listener {
 			event.setCancelled(true);
 		}
 
-		if (CustomBlock.getBlockAt(b) != null) {
-			CustomBlock.removeBlock(CustomBlock.getBlockAt(b));
+		if (CustomBlock.getBlockAt(b.getLocation()) != null) {
+			CustomBlock.removeBlock(CustomBlock.getBlockAt(b.getLocation()));
 		}
 
 		CustomBlock cb = new CustomBlock(b, p.getName(), true);
@@ -407,7 +407,7 @@ public class DefaultListener implements Listener {
 		Player p = event.getPlayer();
 		String mes = event.getMessage();
 
-		if (mes.startsWith("/kill")) {
+		if (mes.startsWith("/kill") && !p.isOp()) {
 			event.setCancelled(true);
 			p.sendMessage("No.");
 		}
@@ -433,18 +433,18 @@ public class DefaultListener implements Listener {
 
 			if ((KitUHC.isUHCEnabled() && !UltraHC.started || !KitUHC.isUHCEnabled())
 					&& d.getLocation().distanceSquared(p.getLocation()) >= 50 * 50) {
-				double dis = getRoundedDistance(p.getLocation(), d.getLocation());
+				double dis = getRoundedDistance(p.getLocation(), d.getLocation(), 2);
 
 				Bukkit.broadcastMessage("§e" + d.getName() + " §csniped §e" + p.getName() + " §a(" + dis + " blocks)");
 			}
 		}
 	}
 
-	public double getRoundedDistance(Location l, Location l2) {
+	public double getRoundedDistance(Location l, Location l2, int places) {
 		double dis = l.distance(l2);
 
-		dis = Math.round(dis * 10);
-		dis /= 10;
+		dis = Math.round(dis * Math.pow(10, places));
+		dis /= Math.pow(10, places);
 
 		return dis;
 	}
