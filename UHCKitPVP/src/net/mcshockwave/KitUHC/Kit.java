@@ -147,7 +147,6 @@ public enum Kit {
 		return new ItemStack(m, amount);
 	}
 
-	@SuppressWarnings("deprecation")
 	public void onSelect(Player p, boolean enter) {
 		p.getInventory().clear();
 		p.getInventory().setArmorContents(acontents);
